@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sopresa Adelita</title>
+    <link rel="icon" type="image/png" href="corazon2.webp">
+    <style>
+        :root {
+            --background-color: #90EE90;
+            --text-color: #2C5530;
+            --box-shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .countdown-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--box-shadow-color);
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .countdown {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .time-segment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 4px 8px var(--box-shadow-color);
+        }
+
+        .label {
+            font-size: 1rem;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        @media (max-width: 768px) {
+    .countdown-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .countdown {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .time {
+        font-size: 2.5rem;
+        min-width: 70px;
+        padding: 0.6rem;
+    }
+
+    .label {
+        font-size: 0.9rem;
+    }
+
+    .gif-container {
+        margin-top: 1.5rem;
+    }
+
+    .valentines-gif {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .countdown-container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .time {
+        font-size: 2rem;
+        min-width: 60px;
+        padding: 0.5rem;
+    }
+
+    .label {
+        font-size: 0.8rem;
+    }
+
+    .valentines-gif {
+        max-width: 80%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="countdown-container">
+        <h1>Cuenta Regresiva</h1>
+        <div class="countdown">
+            <div class="time-segment">
+                <div class="time" id="days">00</div>
+                <span class="label">Días</span>
+            </div>
+            <div class="time-segment">
+                <div class="time" id="hours">00</div>
+                <span class="label">Horas</span>
+            </div>
+            <div class="time-segment">
+                <div class="time" id="minutes">00</div>
+                <span class="label">Minutos</span>
+            </div>
+            <div class="time-segment">
+                <div class="time" id="seconds">00</div>
+                <span class="label">Segundos</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="gif-container">
+        <!-- Aquí debes reemplazar el "URL_DE_TU_GIF" con la URL de tu GIF -->
+        <img src="tortuguita.gif" alt="Valentine's Day GIF" class="valentines-gif">
+    </div>
+
+    <script>
+        function updateCountdown() {
+            const valentinesDay = new Date('2025-02-14T00:00:00').getTime();
+            const now = new Date().getTime();
+            const gap = valentinesDay - now;
+
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const remainingDays = Math.floor(gap / day);
+            const remainingHours = Math.floor((gap % day) / hour);
+            const remainingMinutes = Math.floor((gap % hour) / minute);
+            const remainingSeconds = Math.floor((gap % minute) / second);
+
+            document.getElementById('days').innerText = String(remainingDays).padStart(2, '0');
+            document.getElementById('hours').innerText = String(remainingHours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(remainingMinutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(remainingSeconds).padStart(2, '0');
+
+            if (gap <= 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                clearInterval(countdownTimer);
+            }
+        }
+
+        updateCountdown();
+        const countdownTimer = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
