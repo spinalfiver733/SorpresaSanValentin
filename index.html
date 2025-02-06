@@ -33,6 +33,35 @@
             border-radius: 15px;
             box-shadow: 0 0 20px var(--box-shadow-color);
             text-align: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .countdown-section {
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        .countdown-section.hidden {
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+        }
+
+        .instructions-section {
+            opacity: 0;
+            position: absolute;
+            transition: opacity 1s ease-in;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--box-shadow-color);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .instructions-section.visible {
+            opacity: 1;
+            position: relative;
         }
 
         h1 {
@@ -72,67 +101,87 @@
             letter-spacing: 2px;
         }
 
-@media (max-width: 480px) {
-    .countdown-container {
-        padding: 1rem;
-    }
+        .instruction-text {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+        @media (max-width: 480px) {
+            .countdown-container {
+                padding: 1rem;
+            }
 
-    .time {
-        font-size: 2rem;
-        min-width: 60px;
-        padding: 0.5rem;
-    }
+            h1 {
+                font-size: 1.5rem;
+            }
 
-    .label {
-        font-size: 0.8rem;
-    }
+            .time {
+                font-size: 2rem;
+                min-width: 60px;
+                padding: 0.5rem;
+            }
 
-    .valentines-gif {
-        width: 100vw;
-        height: auto;
-    }
-}
+            .label {
+                font-size: 0.8rem;
+            }
 
+            .valentines-gif {
+                width: 100vw;
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="countdown-container">
-        <h1>Cuenta Regresiva</h1>
-        <div class="countdown">
-            <div class="time-segment">
-                <div class="time" id="days">00</div>
-                <span class="label">Días</span>
-            </div>
-            <div class="time-segment">
-                <div class="time" id="hours">00</div>
-                <span class="label">Horas</span>
-            </div>
-            <div class="time-segment">
-                <div class="time" id="minutes">00</div>
-                <span class="label">Minutos</span>
-            </div>
-            <div class="time-segment">
-                <div class="time" id="seconds">00</div>
-                <span class="label">Segundos</span>
+    <div class="countdown-section">
+        <div class="countdown-container">
+            <h1>Cuenta Regresiva</h1>
+            <div class="countdown">
+                <div class="time-segment">
+                    <div class="time" id="days">00</div>
+                    <span class="label">Días</span>
+                </div>
+                <div class="time-segment">
+                    <div class="time" id="hours">00</div>
+                    <span class="label">Horas</span>
+                </div>
+                <div class="time-segment">
+                    <div class="time" id="minutes">00</div>
+                    <span class="label">Minutos</span>
+                </div>
+                <div class="time-segment">
+                    <div class="time" id="seconds">00</div>
+                    <span class="label">Segundos</span>
+                </div>
             </div>
         </div>
+        
+        <div class="gif-container">
+            <img src="tortuguita.gif" alt="Valentine's Day GIF" class="valentines-gif">
+        </div>
     </div>
-    
-    <div class="gif-container">
-        <!-- Aquí debes reemplazar el "URL_DE_TU_GIF" con la URL de tu GIF -->
-        <img src="tortuguita.gif" alt="Valentine's Day GIF" class="valentines-gif">
+
+    <!-- Nueva sección de instrucciones -->
+    <div class="instructions-section" id="instructions">
+        <h1>¡Ha llegado el momento!</h1>
+        <p class="instruction-text">
+            Aquí puedes colocar las instrucciones o actividades que desees mostrar.
+            Por ejemplo:
+        </p>
+        <div class="instruction-text">
+            1. Primera actividad o instrucción<br>
+            2. Segunda actividad o instrucción<br>
+            3. Tercera actividad o instrucción
+        </div>
     </div>
 
     <script>
         function updateCountdown() {
-            const valentinesDay = new Date('2025-02-14T00:00:00').getTime();
+            const valentinesDay = new Date('2025-02-06T16:55:00').getTime();
             const now = new Date().getTime();
             const gap = valentinesDay - now;
-
             const second = 1000;
             const minute = second * 60;
             const hour = minute * 60;
@@ -149,10 +198,14 @@
             document.getElementById('seconds').innerText = String(remainingSeconds).padStart(2, '0');
 
             if (gap <= 0) {
-                document.getElementById('days').innerText = '00';
-                document.getElementById('hours').innerText = '00';
-                document.getElementById('minutes').innerText = '00';
-                document.getElementById('seconds').innerText = '00';
+                // Ocultar la sección de cuenta regresiva
+                document.querySelector('.countdown-section').classList.add('hidden');
+                
+                // Mostrar la sección de instrucciones
+                setTimeout(() => {
+                    document.querySelector('.instructions-section').classList.add('visible');
+                }, 1000);
+                
                 clearInterval(countdownTimer);
             }
         }
