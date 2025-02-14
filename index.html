@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Sopresa Adelita</title>
     <link rel="icon" type="image/png" href="corazon2.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         :root {
             --background-color: #90EE90;
@@ -194,11 +195,44 @@
                 padding: 0 1rem;
             }
         }
+
+        .choice-button {
+    padding: 1rem 3rem;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    font-weight: bold;
+    -webkit-tap-highlight-color: transparent; /* Elimina el highlight al tocar en iOS */
+    touch-action: manipulation; /* Optimiza para interacciones táctiles */
+    min-height: 60px; /* Asegura área de toque mínima */
+}
+
+/* Añadir estados activos específicos para táctil */
+.choice-button:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+    .choice-button {
+        padding: 1.2rem 2rem; /* Aumentar padding vertical para mejor área de toque */
+        width: 100%; /* Usar todo el ancho disponible */
+        max-width: 280px; /* Limitar el ancho máximo */
+        margin: 0.5rem 0; /* Añadir espacio entre botones */
+    }
+    
+    .button-container {
+        width: 100%;
+        padding: 0 1rem;
+    }
+}
     </style>
 </head>
 <body>
     <br>
-    <h1><strong>Apoco si muy anciosa??</strong></h1>
+    <center><h1>Lo sentimos , por causas externas al bebu ,hemos aplazado la hora de sorpresa, gracias por esperar</h1></center>
     <div class="countdown-section">
         <div class="countdown-container">
             <h1>Cuenta Regresiva</h1>
@@ -231,8 +265,8 @@
     <div class="valentine-section" id="valentine-question">
         <div class="valentine-question">¿Quieres ser my valentine?</div>
         <div class="button-container">
-            <button class="choice-button yes-button" onclick="showYesResponse()">Sí</button>
-            <button class="choice-button no-button" onclick="showNoResponse()">No</button>
+            <button class="choice-button yes-button" id="yesButton">Sí</button>
+            <button class="choice-button no-button" id="noButton">No</button>
         </div>
     </div>
 
@@ -247,50 +281,74 @@
     </div>
 
     <script>
-        function updateCountdown() {
-            const valentinesDay = new Date('2025-02-14T17:00:00').getTime();
-            const now = new Date().getTime();
-            const gap = valentinesDay - now;
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Configurar los event listeners para los botones
+    const yesButton = document.getElementById('yesButton');
+    const noButton = document.getElementById('noButton');
 
-            const remainingDays = Math.floor(gap / day);
-            const remainingHours = Math.floor((gap % day) / hour);
-            const remainingMinutes = Math.floor((gap % hour) / minute);
-            const remainingSeconds = Math.floor((gap % minute) / second);
+    if (yesButton) {
+        yesButton.addEventListener('click', showYesResponse);
+        yesButton.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showYesResponse();
+        });
+    }
 
-            document.getElementById('days').innerText = String(remainingDays).padStart(2, '0');
-            document.getElementById('hours').innerText = String(remainingHours).padStart(2, '0');
-            document.getElementById('minutes').innerText = String(remainingMinutes).padStart(2, '0');
-            document.getElementById('seconds').innerText = String(remainingSeconds).padStart(2, '0');
+    if (noButton) {
+        noButton.addEventListener('click', showNoResponse);
+        noButton.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            showNoResponse();
+        });
+    }
 
-            if (gap <= 0) {
-                document.querySelector('.countdown-section').classList.add('hidden');
-                setTimeout(() => {
-                    document.querySelector('.valentine-section').classList.add('visible');
-                }, 1000);
-                clearInterval(countdownTimer);
-            }
-        }
+    // Iniciar el countdown
+    updateCountdown();
+    const countdownTimer = setInterval(updateCountdown, 1000);
+});
 
-        function showYesResponse() {
-            document.querySelector('.valentine-section').classList.add('hidden');
-            setTimeout(() => {
-                document.querySelector('.yes-section').classList.add('visible');
-            }, 1000);
-        }
+function updateCountdown() {
+    const valentinesDay = new Date('2025-02-14T19:00:00').getTime();
+    const now = new Date().getTime();
+    const gap = valentinesDay - now;
+    
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
 
-        function showNoResponse() {
-            document.querySelector('.valentine-section').classList.add('hidden');
-            setTimeout(() => {
-                document.querySelector('.no-section').classList.add('visible');
-            }, 1000);
-        }
+    const remainingDays = Math.floor(gap / day);
+    const remainingHours = Math.floor((gap % day) / hour);
+    const remainingMinutes = Math.floor((gap % hour) / minute);
+    const remainingSeconds = Math.floor((gap % minute) / second);
 
-        updateCountdown();
-        const countdownTimer = setInterval(updateCountdown, 1000);
+    document.getElementById('days').innerText = String(remainingDays).padStart(2, '0');
+    document.getElementById('hours').innerText = String(remainingHours).padStart(2, '0');
+    document.getElementById('minutes').innerText = String(remainingMinutes).padStart(2, '0');
+    document.getElementById('seconds').innerText = String(remainingSeconds).padStart(2, '0');
+
+    if (gap <= 0) {
+        document.querySelector('.countdown-section').classList.add('hidden');
+        setTimeout(() => {
+            document.querySelector('.valentine-section').classList.add('visible');
+        }, 1000);
+        clearInterval(countdownTimer);
+    }
+}
+
+function showYesResponse() {
+    document.querySelector('.valentine-section').classList.add('hidden');
+    setTimeout(() => {
+        document.querySelector('.yes-section').classList.add('visible');
+    }, 1000);
+}
+
+function showNoResponse() {
+    document.querySelector('.valentine-section').classList.add('hidden');
+    setTimeout(() => {
+        document.querySelector('.no-section').classList.add('visible');
+    }, 1000);
+}
     </script>
 </body>
 </html>
