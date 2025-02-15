@@ -232,7 +232,6 @@
 </head>
 <body>
     <br>
-    <center><h1>Lo sentimos , por causas externas al bebu ,hemos aplazado la hora de sorpresa, gracias por esperar</h1></center>
     <div class="countdown-section">
         <div class="countdown-container">
             <h1>Cuenta Regresiva</h1>
@@ -282,73 +281,97 @@
 
     <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Configurar los event listeners para los botones
+    // Seleccionar los botones
     const yesButton = document.getElementById('yesButton');
     const noButton = document.getElementById('noButton');
+    const audio = document.getElementById('valentineAudio');
 
+    // Agregar eventos a los botones
     if (yesButton) {
-        yesButton.addEventListener('click', showYesResponse);
-        yesButton.addEventListener('touchend', function(e) {
+        yesButton.addEventListener('click', () => {
+            showYesResponse();
+            playAudio();
+        });
+
+        yesButton.addEventListener('touchend', (e) => {
             e.preventDefault();
             showYesResponse();
+            playAudio();
         });
     }
 
     if (noButton) {
-        noButton.addEventListener('click', showNoResponse);
-        noButton.addEventListener('touchend', function(e) {
+        noButton.addEventListener('click', () => {
+            showNoResponse();
+            playAudio();
+        });
+
+        noButton.addEventListener('touchend', (e) => {
             e.preventDefault();
             showNoResponse();
+            playAudio();
         });
     }
 
-    // Iniciar el countdown
+    // Función para reproducir el audio
+    function playAudio() {
+    if (audio) {
+        audio.load(); // Asegura que el archivo está cargado
+        audio.play().then(() => {
+            console.log("Audio reproduciéndose correctamente.");
+        }).catch(error => {
+            console.error("Error al reproducir el audio:", error);
+        });
+    }
+}
+
+
+    // Función para mostrar la respuesta "Sí"
+    function showYesResponse() {
+        document.querySelector('.valentine-section').classList.add('hidden');
+        setTimeout(() => {
+            document.querySelector('.yes-section').classList.add('visible');
+        }, 1000);
+    }
+
+    // Función para mostrar la respuesta "No"
+    function showNoResponse() {
+        document.querySelector('.valentine-section').classList.add('hidden');
+        setTimeout(() => {
+            document.querySelector('.no-section').classList.add('visible');
+        }, 1000);
+    }
+
+    // Cuenta regresiva
+    function updateCountdown() {
+        const valentinesDay = new Date('2025-02-14T20:00:00').getTime();
+        const now = new Date().getTime();
+        const gap = valentinesDay - now;
+
+        const second = 1000;
+        const minute = second * 60;
+        const hour = minute * 60;
+        const day = hour * 24;
+
+        document.getElementById('days').innerText = String(Math.floor(gap / day)).padStart(2, '0');
+        document.getElementById('hours').innerText = String(Math.floor((gap % day) / hour)).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(Math.floor((gap % hour) / minute)).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(Math.floor((gap % minute) / second)).padStart(2, '0');
+
+        if (gap <= 0) {
+            document.querySelector('.countdown-section').classList.add('hidden');
+            setTimeout(() => {
+                document.querySelector('.valentine-section').classList.add('visible');
+            }, 1000);
+            clearInterval(countdownTimer);
+        }
+    }
+
     updateCountdown();
     const countdownTimer = setInterval(updateCountdown, 1000);
 });
 
-function updateCountdown() {
-    const valentinesDay = new Date('2025-02-14T20:00:00').getTime();
-    const now = new Date().getTime();
-    const gap = valentinesDay - now;
-    
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
-
-    const remainingDays = Math.floor(gap / day);
-    const remainingHours = Math.floor((gap % day) / hour);
-    const remainingMinutes = Math.floor((gap % hour) / minute);
-    const remainingSeconds = Math.floor((gap % minute) / second);
-
-    document.getElementById('days').innerText = String(remainingDays).padStart(2, '0');
-    document.getElementById('hours').innerText = String(remainingHours).padStart(2, '0');
-    document.getElementById('minutes').innerText = String(remainingMinutes).padStart(2, '0');
-    document.getElementById('seconds').innerText = String(remainingSeconds).padStart(2, '0');
-
-    if (gap <= 0) {
-        document.querySelector('.countdown-section').classList.add('hidden');
-        setTimeout(() => {
-            document.querySelector('.valentine-section').classList.add('visible');
-        }, 1000);
-        clearInterval(countdownTimer);
-    }
-}
-
-function showYesResponse() {
-    document.querySelector('.valentine-section').classList.add('hidden');
-    setTimeout(() => {
-        document.querySelector('.yes-section').classList.add('visible');
-    }, 1000);
-}
-
-function showNoResponse() {
-    document.querySelector('.valentine-section').classList.add('hidden');
-    setTimeout(() => {
-        document.querySelector('.no-section').classList.add('visible');
-    }, 1000);
-}
     </script>
+        <audio id="valentineAudio" src="It Only Takes A Moment From Hello Dolly 1969 And Wall E 2008.mp3"></audio>
 </body>
 </html>
